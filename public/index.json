@@ -1,0 +1,302 @@
+[
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/",
+	"title": "AWS Cost Management Lab Guide",
+	"tags": [],
+	"description": "",
+	"content": "Xây Dựng Hệ Thống Quản Lý \u0026amp; Phân Bổ Chi Phí AWS Hiệu Quả Tổng Quan Chào mừng bạn đến với Lab Guide toàn diện này, nơi bạn sẽ được trang bị những kiến thức và kỹ năng thực tế để quản lý và tối ưu hóa chi phí trên nền tảng AWS. Trong môi trường đám mây linh hoạt, việc kiểm soát chi tiêu là yếu tố then chốt để duy trì hiệu quả hoạt động và đưa ra các quyết định kinh doanh sáng suốt. Lab này sẽ hướng dẫn bạn từng bước xây dựng một hệ thống quản lý chi phí minh bạch, từ việc thiết lập nền tảng tài khoản đến phân tích chi phí chi tiết và đặt ra các ngưỡng ngân sách chủ động. Bạn sẽ học cách phân bổ chi phí theo các tiêu chí kinh doanh cụ thể như phòng ban, dự án, hoặc môi trường triển khai, biến dữ liệu chi phí thành thông tin có giá trị để tối ưu hóa tài nguyên.\n(Hình ảnh minh họa tổng quan về quy trình quản lý chi phí AWS)\nMục Lục Trong Lab này, chúng ta sẽ đi qua các phần sau đây để xây dựng và thực hành hệ thống quản lý chi phí AWS:\nGiới thiệu chung về AWS Cost Management Thiết Lập Nền Tảng: AWS Organizations và Tài Khoản Tạo Tài Nguyên và Chiến Lược Gắn Thẻ (Tagging) Kích Hoạt Thẻ Phân Bổ Chi Phí (Cost Allocation Tags) Chủ động Quản lý Chi tiêu với AWS Budgets Phân Tích và Trực Quan Hóa Chi phí với AWS Cost Explorer Dọn Dẹp Tài Nguyên (Cleanup) "
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/6-cost-explorer/6.3/6.3.1/",
+	"title": "Điều chỉnh phạm vi thời gian",
+	"tags": [],
+	"description": "",
+	"content": "6.3.1. Điều chỉnh phạm vi thời gian\nỞ góc trên bên phải của giao diện Cost Explorer, bạn sẽ thấy một ô chọn khoảng thời gian (ví dụ: \u0026ldquo;Last 6 months\u0026rdquo;, \u0026ldquo;This month to date\u0026rdquo;). Rất quan trọng: Chọn một khoảng thời gian đủ dài để bao gồm thời gian EC2 Instance của bạn đã chạy và phát sinh chi phí, cũng như thời gian bạn đã kích hoạt các thẻ phân bổ chi phí. Click vào ô chọn ngày. Các lựa chọn phổ biến: Last 7 days (7 ngày gần nhất): Tốt nếu bạn mới chạy EC2 gần đây. This month to date (Từ đầu tháng đến nay): Nếu Instance chạy trong tháng hiện tại. Custom (Tùy chỉnh): Đây là lựa chọn tốt nhất để đảm bảo bạn bao quát toàn bộ thời gian. Click vào Custom, sau đó chọn ngày bạn khởi chạy EC2 Instance (ví dụ: ngày 16/7/2025) cho đến ngày hôm nay. "
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/1-introduce/",
+	"title": "Giới thiệu chung về AWS Cost Management",
+	"tags": [],
+	"description": "",
+	"content": "Chào mừng bạn đến với Lab hướng dẫn xây dựng hệ thống quản lý và phân bổ chi phí trên AWS. Trong bối cảnh điện toán đám mây ngày càng phát triển, việc kiểm soát và tối ưu hóa chi phí trở thành một yếu tố cực kỳ quan trọng đối với mọi doanh nghiệp. AWS cung cấp một bộ công cụ mạnh mẽ giúp bạn theo dõi, phân tích và kiểm soát chi tiêu của mình một cách hiệu quả.\n1.1. Tầm quan trọng của Quản lý Chi phí trên AWS\nTrong môi trường đám mây linh hoạt, tài nguyên có thể được khởi tạo và hủy bỏ một cách nhanh chóng, dẫn đến việc chi phí có thể tăng lên mà không được kiểm soát nếu không có một chiến lược quản lý rõ ràng. Quản lý chi phí không chỉ đơn thuần là việc xem hóa đơn cuối tháng; nó bao gồm việc hiểu rõ:\nAi đang tiêu tốn chi phí? (Phòng ban nào, dự án nào?) Tài nguyên nào đang tiêu tốn chi phí? (Máy chủ, lưu trữ, cơ sở dữ liệu, v.v.?) Chi phí đang tăng hay giảm theo thời gian? (Xu hướng chi tiêu) Làm thế nào để tối ưu hóa chi phí mà vẫn đảm bảo hiệu suất? Một hệ thống quản lý chi phí hiệu quả sẽ mang lại sự minh bạch, giúp các đội ngũ đưa ra quyết định tốt hơn về việc sử dụng tài nguyên, thúc đẩy trách nhiệm giải trình và cuối cùng là tối ưu hóa ngân sách IT.\n1.2. Các Dịch vụ AWS chính trong Quản lý Chi phí\nAWS cung cấp một bộ công cụ toàn diện để hỗ trợ bạn trong hành trình quản lý chi phí. Trong Lab này, chúng ta sẽ tập trung vào các dịch vụ cốt lõi sau:\nAWS Organizations: Dịch vụ này cho phép bạn quản lý và hợp nhất nhiều tài khoản AWS dưới một tổ chức duy nhất. Điều này cực kỳ hữu ích cho việc thanh toán tập trung (consolidated billing), quản lý chính sách và phân tách chi phí giữa các đơn vị khác nhau trong doanh nghiệp của bạn. Amazon EC2 (Elastic Compute Cloud): Đây là dịch vụ điện toán đám mây cung cấp máy chủ ảo (instances) có thể thay đổi kích thước. Chúng ta sẽ sử dụng EC2 để tạo ra một tài nguyên mẫu, qua đó bạn có thể thấy chi phí phát sinh và cách chúng ta áp dụng các chiến lược quản lý chi phí. AWS Billing Dashboard: Đây là bảng điều khiển trung tâm nơi bạn có thể xem tổng quan về hóa đơn, chi phí và các công cụ quản lý tài chính của mình trên AWS. Cost Allocation Tags: Một tính năng quan trọng cho phép bạn gán các thẻ (key-value pairs) vào tài nguyên AWS của mình. Sau khi được kích hoạt, các thẻ này sẽ xuất hiện trong báo cáo chi phí, cho phép bạn phân bổ chi phí theo các tiêu chí như phòng ban, dự án, hoặc môi trường. Cost Explorer: Là công cụ trực quan hóa chi phí mạnh mẽ, giúp bạn phân tích chi phí và mức sử dụng AWS theo thời gian. Bạn có thể sử dụng Cost Explorer để khám phá dữ liệu chi phí của mình theo nhiều chiều khác nhau, phát hiện xu hướng và các khu vực có thể tối ưu hóa. Budgets: Dịch vụ cho phép bạn thiết lập các ngưỡng chi phí hoặc mức sử dụng dự kiến. Khi chi tiêu của bạn đạt hoặc dự kiến đạt đến các ngưỡng này, Budgets sẽ tự động gửi cảnh báo cho bạn, giúp bạn chủ động kiểm soát ngân sách và tránh các chi phí bất ngờ. Trong suốt quá trình Lab, chúng ta sẽ làm việc trực tiếp với AWS Management Console, thực hiện từng bước một để bạn có thể nắm vững cách các dịch vụ này hoạt động cùng nhau để tạo nên một hệ thống quản lý chi phí toàn diện và hiệu quả.\n"
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/6-cost-explorer/6.1/",
+	"title": "Giới thiệu về Cost Explorer",
+	"tags": [],
+	"description": "",
+	"content": "6.1. Giới thiệu về Cost Explorer\nCost Explorer cho phép bạn:\nPhân tích chi phí lịch sử: Xem chi phí của bạn trong quá khứ theo ngày, tháng hoặc năm. Dự báo chi phí: Ước tính chi phí trong tương lai dựa trên mức sử dụng hiện tại. Khám phá chi phí theo nhiều chiều: Lọc và nhóm chi phí theo dịch vụ, tài khoản, khu vực, và quan trọng nhất là theo các thẻ phân bổ chi phí tùy chỉnh của bạn. Lưu và chia sẻ báo cáo: Tạo các báo cáo tùy chỉnh và lưu chúng để truy cập nhanh chóng, hoặc xuất dữ liệu để phân tích thêm. "
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/3-tagging/3.1/",
+	"title": "Khởi chạy EC2 Instance và gắn thẻ chi tiết",
+	"tags": [],
+	"description": "",
+	"content": "3.1. Tại sao cần gắn thẻ cho tài nguyên AWS?\nPhân bổ chi phí chính xác: Đây là mục tiêu chính của Lab này. Bằng cách gắn thẻ Department, Project, Environment, bạn có thể dễ dàng xác định chi phí của từng đơn vị hoặc mục đích cụ thể. Quản lý tài nguyên: Dễ dàng tìm kiếm, lọc và nhóm các tài nguyên dựa trên thẻ. Ví dụ, bạn có thể nhanh chóng tìm tất cả các máy chủ thuộc về \u0026ldquo;Dự án X\u0026rdquo; trong môi trường \u0026ldquo;Sản xuất\u0026rdquo;. Kiểm soát truy cập: Sử dụng thẻ trong các chính sách IAM (Identity and Access Management) để kiểm soát ai có thể truy cập hoặc thực hiện hành động trên các tài nguyên cụ thể. Tự động hóa: Tự động hóa các tác vụ quản lý và vận hành dựa trên thẻ, ví dụ: tự động dừng các máy chủ \u0026ldquo;Development\u0026rdquo; vào cuối ngày làm việc. Tuân thủ: Đảm bảo tài nguyên tuân thủ các quy tắc gắn thẻ của tổ chức. "
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/4-activate-tags/4.1/",
+	"title": "Mục đích của Cost Allocation Tags",
+	"tags": [],
+	"description": "",
+	"content": "4.1. Mục đích của Cost Allocation Tags\nCost Allocation Tags là cầu nối giữa các thẻ bạn gắn vào tài nguyên và dữ liệu chi phí trong các báo cáo của AWS. Khi một thẻ được kích hoạt:\nAWS bắt đầu thu thập dữ liệu chi phí liên quan đến tài nguyên đó và gán chi phí đó cho cặp Key-Value của thẻ. Các thẻ này sẽ xuất hiện dưới dạng các tùy chọn để lọc (Filter) và nhóm (Group by) chi phí trong Cost Explorer và các báo cáo khác. Điều này cho phép bạn có cái nhìn chi tiết về chi phí theo các tiêu chí kinh doanh của mình (ví dụ: tổng chi phí của bộ phận Marketing, chi phí của dự án Website Launch). "
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/7-cleanup/7.1/",
+	"title": "Tại sao cần dọn dẹp tài nguyên?",
+	"tags": [],
+	"description": "",
+	"content": "7.1. Tại sao cần dọn dẹp tài nguyên?\nTránh chi phí không cần thiết: Ngay cả các tài nguyên nhỏ hoặc nằm trong Free Tier cũng có thể bắt đầu phát sinh chi phí nếu chúng vượt quá hạn mức miễn phí hoặc nếu bạn quên tắt/xóa chúng. Giữ tài khoản gọn gàng: Giúp tài khoản AWS của bạn không bị lộn xộn với các tài nguyên không sử dụng, dễ dàng quản lý hơn trong tương lai. Bảo mật: Giảm thiểu bề mặt tấn công bằng cách loại bỏ các tài nguyên không cần thiết. "
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/5-budgets/5.1/",
+	"title": "Tầm quan trọng của việc thiết lập Budgets",
+	"tags": [],
+	"description": "",
+	"content": "5.1. Tầm quan trọng của việc thiết lập Budgets\nKiểm soát chi phí chủ động: Nhận cảnh báo sớm giúp bạn hành động kịp thời trước khi vượt quá ngân sách. Tăng cường trách nhiệm giải trình: Có thể thiết lập Budgets cho từng phòng ban, dự án, hoặc môi trường, giúp các bên liên quan nhận thức rõ hơn về chi tiêu của họ. Phát hiện bất thường: Cảnh báo về chi phí dự kiến có thể giúp bạn phát hiện các tài nguyên bị bỏ quên hoặc các hoạt động không mong muốn đang làm tăng chi phí. Hỗ trợ ra quyết định: Dữ liệu từ Budgets cung cấp thông tin quý giá để lập kế hoạch ngân sách tốt hơn trong tương lai. "
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/5-budgets/5.2/5.2.1/",
+	"title": "Truy cập AWS Budgets",
+	"tags": [],
+	"description": "",
+	"content": "5.2.1. Truy cập AWS Budgets\nĐăng nhập vào AWS Console: Đảm bảo bạn đang đăng nhập vào tài khoản AWS hiện tại của bạn. Truy cập Billing Dashboard: Tương tự như các bước trước, click vào tên tài khoản của bạn ở góc trên bên phải và chọn Billing Dashboard. Điều hướng đến Budgets: Trong thanh điều hướng bên trái của Billing Dashboard, dưới mục Budgets and Planning, click vào Budgets. "
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/3-tagging/3.2/3.2.1/",
+	"title": "Truy cập dịch vụ EC2",
+	"tags": [],
+	"description": "",
+	"content": "3.2.1. Truy cập dịch vụ EC2\nTrong thanh tìm kiếm ở phía trên cùng của AWS Management Console, gõ \u0026ldquo;EC2\u0026rdquo; và sau đó click vào dịch vụ EC2 để truy cập bảng điều khiển EC2. * Bạn sẽ được đưa đến bảng điều khiển EC2, nơi hiển thị tổng quan về các tài nguyên EC2 của bạn.\n"
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/2-organizations/2.1/",
+	"title": "Vai trò của AWS Organizations trong quản lý chi phí",
+	"tags": [],
+	"description": "",
+	"content": "2.1. Vai trò của AWS Organizations trong quản lý chi phí\nTrong một môi trường doanh nghiệp quy mô lớn hoặc đang phát triển, việc sử dụng nhiều tài khoản AWS là một \u0026ldquo;best practice\u0026rdquo; được khuyến nghị để đạt được các mục tiêu về bảo mật, quản lý truy cập, cô lập lỗi và đặc biệt là quản lý chi phí. Mỗi phòng ban, dự án, hoặc môi trường (phát triển, thử nghiệm, sản xuất) có thể có một tài khoản AWS riêng biệt.\nAWS Organizations giúp bạn:\nThanh toán tập trung (Consolidated Billing): Tất cả các chi phí từ các tài khoản thành viên (member accounts) sẽ được tổng hợp và hiển thị trên một hóa đơn duy nhất của tài khoản quản lý (management account). Điều này đơn giản hóa quy trình thanh toán và thường mang lại lợi ích về giá do tổng hợp mức sử dụng. Phân tách chi phí rõ ràng: Mặc dù hóa đơn là tập trung, AWS vẫn cung cấp khả năng xem chi phí chi tiết cho từng tài khoản thành viên, giúp bạn dễ dàng phân bổ chi phí cho từng đơn vị sử dụng. Quản lý chính sách tập trung: Áp dụng các chính sách bảo mật và tuân thủ (Service Control Policies - SCPs) trên toàn bộ tổ chức hoặc cho từng Đơn vị Tổ chức (Organizational Units - OUs), đảm bảo tính nhất quán và an toàn. "
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/3-tagging/3.2/3.2.2/",
+	"title": "Bắt đầu khởi chạy Instance",
+	"tags": [],
+	"description": "",
+	"content": "3.2.2. Bắt đầu khởi chạy Instance\nTrong thanh điều hướng bên trái của bảng điều khiển EC2, dưới mục Instances, click vào Instances. Trên trang Instances, bạn sẽ thấy danh sách các máy chủ hiện có của mình (nếu có). Click vào nút màu cam Launch instances ở góc trên bên phải để bắt đầu quá trình tạo một máy chủ ảo mới. "
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/7-cleanup/7.2/",
+	"title": "Các bước dừng (Stop) hoặc chấm dứt (Terminate) EC2 Instance",
+	"tags": [],
+	"description": "",
+	"content": "7.2. Các bước dừng (Stop) hoặc chấm dứt (Terminate) EC2 Instance\nTrong Lab này, chúng ta đã tạo một EC2 Instance. Bạn có hai lựa chọn chính để xử lý nó:\nDừng (Stop) EC2 Instance:\nMục đích: Ngừng phát sinh chi phí cho thời gian hoạt động của Instance. Instance sẽ chuyển sang trạng thái stopped. Bạn vẫn giữ được cấu hình và dữ liệu của Instance để khởi động lại sau này nếu cần. Lưu ý: Bạn vẫn có thể bị tính phí cho dung lượng lưu trữ EBS (ổ đĩa gắn vào Instance) ngay cả khi Instance đã dừng, mặc dù phí này thường rất nhỏ và có thể nằm trong hạn mức Free Tier. Cách thực hiện: Trong AWS Console, truy cập EC2 Dashboard \u0026gt; Instances. Tìm và chọn Instance bạn đã tạo (ví dụ: Web-Server-Dev-001). Click vào nút Instance state ở phía trên cùng của bảng. Trong menu thả xuống, chọn Stop instance. Xác nhận hành động khi được hỏi. Chấm dứt (Terminate) EC2 Instance:\nMục đích: Ngừng hoàn toàn tất cả các chi phí liên quan đến Instance đó (bao gồm cả EBS volume) từ thời điểm bạn chấm dứt. Instance sẽ bị xóa vĩnh viễn khỏi tài khoản của bạn. Lưu ý quan trọng: Khi bạn chấm dứt một Instance, nó và tất cả dữ liệu trên ổ đĩa gốc của nó sẽ bị xóa vĩnh viễn và không thể khôi phục. Chỉ sử dụng tùy chọn này nếu bạn chắc chắn không cần Instance đó nữa. Cách thực hiện: Trong AWS Console, truy cập EC2 Dashboard \u0026gt; Instances. Tìm và chọn Instance bạn đã tạo. Click vào nút Instance state ở phía trên cùng của bảng. Trong menu thả xuống, chọn Terminate instance. Xác nhận hành động khi được hỏi. Khuyến nghị: Đối với mục đích của Lab này, nếu bạn đã hoàn thành việc khám phá và không cần Instance đó nữa, Terminate instance là lựa chọn tốt nhất để đảm bảo không có chi phí phát sinh thêm.\n"
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/4-activate-tags/4.2/",
+	"title": "Các bước kích hoạt thẻ",
+	"tags": [],
+	"description": "",
+	"content": "4.2. Các bước kích hoạt thẻ\nĐăng nhập vào AWS Console: Đảm bảo bạn đang đăng nhập vào tài khoản AWS hiện tại của bạn (tài khoản quản lý: 851920544845).\nTruy cập Billing Dashboard:\nTrên thanh điều hướng của AWS Console (thường là ở phía trên cùng của trang), click vào tên tài khoản của bạn (ví dụ: Account ID: 851920544845). Trong menu thả xuống, chọn Billing Dashboard. Đây là trung tâm quản lý chi phí của bạn. Điều hướng đến \u0026ldquo;Cost allocation tags\u0026rdquo;:\nTrong thanh điều hướng bên trái của Billing Dashboard, cuộn xuống mục Cost Organization. Click vào Cost allocation tags. Kích hoạt các thẻ tùy chỉnh của bạn:\nTrên trang Cost Allocation Tags, bạn sẽ thấy hai tab: User-defined cost allocation tags và AWS-generated cost allocation tags. Đảm bảo bạn đang ở tab User-defined cost allocation tags. Tab này hiển thị các khóa thẻ mà bạn hoặc các người dùng khác đã gắn vào tài nguyên của mình. Lúc này, bạn sẽ thấy các khóa thẻ mà bạn đã gắn cho EC2 Instance của mình (ví dụ: Name, Department, Project, Environment, CostCenter, Owner) xuất hiện trong danh sách này. Nếu bạn chưa thấy, vui lòng xem lại phần 4.3. Hiểu về thời gian chờ đợi dữ liệu. Chọn ô vuông (checkbox) bên cạnh TẤT CẢ các khóa thẻ này để kích hoạt chúng. Sau khi chọn, nút màu xanh dương Activate ở góc trên bên phải của bảng sẽ sáng lên. Click vào nút Activate. Một hộp thoại xác nhận có thể xuất hiện, hỏi bạn có chắc chắn muốn kích hoạt các thẻ này không. Hãy xác nhận việc kích hoạt. Kiểm tra trạng thái: Sau khi kích hoạt, trạng thái của các thẻ này sẽ chuyển từ Inactive sang Active. Bạn cũng sẽ thấy cột \u0026ldquo;Last updated date\u0026rdquo; được cập nhật, cho biết thời điểm thẻ được kích hoạt. "
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/3-tagging/3.2/",
+	"title": "Khởi chạy EC2 Instance và gắn thẻ chi tiết",
+	"tags": [],
+	"description": "",
+	"content": "3.2. Khởi chạy EC2 Instance và gắn thẻ chi tiết\nĐể minh họa việc gắn thẻ và phát sinh chi phí, chúng ta sẽ khởi chạy một EC2 Instance. Đây là một tài nguyên phổ biến và dễ dàng để theo dõi chi phí.\nNội dung 3.2.1. Truy cập dịch vụ EC2\n3.2.2. Bắt đầu khởi chạy Instance\n3.2.3. Cấu hình \u0026ldquo;Name and tags\n3.2.4. Cấu hình các thiết lập cơ bản khác\n3.2.5. Hoàn tất khởi chạy và xác nhận trạng thái\n"
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/6-cost-explorer/6.3/6.3.2/",
+	"title": "Sử dụng Group by để phân bổ chi phí theo thẻ",
+	"tags": [],
+	"description": "",
+	"content": "6.3.2. Sử dụng \u0026ldquo;Group by\u0026rdquo; để phân bổ chi phí theo thẻ\nĐây là phần cốt lõi để bạn thấy chi phí được phân loại theo các thẻ mà bạn đã thiết lập.\nNgay phía trên biểu đồ chính, bạn sẽ thấy một ô thả xuống có nhãn Group by. Click vào ô thả xuống đó. Trong danh sách các tùy chọn Group by, cuộn xuống tìm phần Tags. Chọn một trong các thẻ tùy chỉnh của bạn mà bạn đã gắn cho EC2 Instance. Ví dụ 1: Nhóm theo Phòng ban: Chọn Tag:Department. Quan sát: Cost Explorer sẽ tự động vẽ lại biểu đồ và sắp xếp lại bảng dữ liệu bên dưới để hiển thị chi phí của bạn được chia nhỏ theo từng giá trị mà thẻ Department của bạn có (ví dụ: Marketing, Engineering, v.v.). Nếu có chi phí không được gắn thẻ Department, chúng sẽ được nhóm dưới nhãn \u0026ldquo;No tag key: Department\u0026rdquo;. Ví dụ 2: Nhóm theo Dự án: Thay đổi Group by để chọn Tag:Project. Quan sát: Biểu đồ và bảng sẽ hiển thị chi phí được nhóm theo từng dự án (ví dụ: WebsiteLaunch, CRMSystem). Ví dụ 3: Nhóm theo Môi trường: Chọn Tag:Environment. Quan sát: Biểu đồ và bảng sẽ hiển thị chi phí theo từng môi trường (Development, Production, v.v.). Nhóm hai cấp độ (Tùy chọn nâng cao): Bạn có thể nhóm theo hai thẻ cùng lúc để có cái nhìn chi tiết hơn. Đầu tiên, chọn Tag:Department cho \u0026ldquo;Group by\u0026rdquo; thứ nhất. Sau đó, click lại vào ô \u0026ldquo;Group by\u0026rdquo; và chọn Tag:Project cho \u0026ldquo;Group by\u0026rdquo; thứ hai. Quan sát: Biểu đồ và bảng sẽ hiển thị chi phí của từng dự án trong mỗi phòng ban, cung cấp một cái nhìn rất chi tiết. "
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/5-budgets/5.2/",
+	"title": "Tạo một Cost Budget cơ bản",
+	"tags": [],
+	"description": "",
+	"content": "5.2. Tạo một Cost Budget cơ bản\nChúng ta sẽ tạo một ngân sách chi phí cơ bản cho dịch vụ EC2 của bạn. Sau này, khi dữ liệu thẻ đã cập nhật đầy đủ trong Cost Explorer, bạn có thể chỉnh sửa ngân sách này để thêm bộ lọc theo thẻ (ví dụ: ngân sách cho Department:Marketing).\nNội dung 5.2.1. Truy cập AWS Budgets\n5.2.2. Tạo Ngân sách Mới\n5.2.3. Cấu hình Chi tiết Ngân sách\n5.2.4. Cấu hình Phạm vi\n5.2.5. Cấu hình Cảnh báo\n5.2.6. Xem lại và Tạo Ngân sách\n"
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/5-budgets/5.2/5.2.2/",
+	"title": "Tạo Ngân sách Mới",
+	"tags": [],
+	"description": "",
+	"content": "5.2.2. Tạo Ngân sách Mới\nClick vào nút màu cam Create budget ở góc trên bên phải. Chọn loại Ngân sách: Bạn sẽ thấy các tùy chọn như Cost budget, Usage budget, Reservation budget, Savings Plans budget. Chọn Cost budget (Ngân sách chi phí) để theo dõi chi phí thực tế hoặc dự kiến của bạn. Click Set your budget. "
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/2-organizations/2.2/",
+	"title": "Tạo và Xác nhận trạng thái AWS Organizations",
+	"tags": [],
+	"description": "",
+	"content": "2.2. Tạo và Xác nhận trạng thái AWS Organizations\nAWS Organizations là dịch vụ cho phép bạn quản lý tập trung nhiều tài khoản AWS.\nNếu tài khoản của bạn chưa có Organization, hãy thực hiện các bước dưới đây để tạo mới.\nBước 1: Đăng nhập AWS Management Console\nMở trình duyệt và truy cập: https://console.aws.amazon.com Đăng nhập bằng tài khoản AWS bạn muốn làm Management Account (tài khoản quản lý). Đảm bảo bạn đang ở Region bất kỳ (Organizations là dịch vụ toàn cầu). Bước 2: Mở dịch vụ AWS Organizations\nTrong thanh tìm kiếm ở góc trên cùng, gõ \u0026ldquo;Organizations\u0026rdquo; và nhấn Enter. Chọn dịch vụ AWS Organizations từ danh sách kết quả. Bước 3: Bắt đầu tạo Organization\nNếu đây là lần đầu bạn vào dịch vụ này, AWS sẽ hiển thị nút \u0026ldquo;Create an organization\u0026rdquo;. Nhấn \u0026ldquo;Create an organization\u0026rdquo;. Chọn \u0026ldquo;Enable all features\u0026rdquo; để có đầy đủ tính năng quản lý và bảo mật (khuyến nghị). Bước 4: Chờ AWS khởi tạo Organization\nAWS sẽ tự động tạo Root Organizational Unit (OU). Tài khoản của bạn sẽ trở thành Management Account và được liệt kê dưới Root OU. Bạn sẽ thấy thông báo:\n\u0026quot;You successfully created an AWS organization.\u0026quot; "
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/2-organizations/",
+	"title": "Thiết Lập Nền Tảng: AWS Organizations và Tài Khoản",
+	"tags": [],
+	"description": "",
+	"content": "Việc thiết lập một cấu trúc tài khoản AWS hợp lý là nền tảng vững chắc cho mọi chiến lược quản lý chi phí hiệu quả. AWS Organizations đóng vai trò trung tâm trong việc này, cho phép bạn quản lý tập trung nhiều tài khoản AWS.\nNội dung 2.1. Vai trò của AWS Organizations trong quản lý chi phí\n2.2. Tạo và Xác nhận trạng thái AWS Organizations\n2.3. Tạo Organizational Unit trong Root\n2.4. Tạo AWS Account\n"
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/6-cost-explorer/6.2/",
+	"title": "Truy cập Cost Explorer",
+	"tags": [],
+	"description": "",
+	"content": "6.2. Truy cập Cost Explorer\nĐăng nhập vào AWS Console: Đảm bảo bạn đang đăng nhập vào tài khoản AWS hiện tại của bạn. Truy cập Billing Dashboard: Tương tự như các bước trước, click vào tên tài khoản của bạn ở góc trên bên phải và chọn Billing Dashboard. Điều hướng đến Cost Explorer: Trong thanh điều hướng bên trái của Billing Dashboard, dưới mục Cost and Usage Analysis, click vào Cost Explorer. Lưu ý: Nếu đây là lần đầu tiên bạn truy cập Cost Explorer, AWS có thể yêu cầu bạn kích hoạt dịch vụ này. Quá trình kích hoạt thường mất vài phút. Hãy làm theo hướng dẫn trên màn hình để kích hoạt nó. "
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/6-cost-explorer/6.3/",
+	"title": "Cấu hình báo cáo để phân tích theo thẻ",
+	"tags": [],
+	"description": "",
+	"content": "6.3. Cấu hình báo cáo để phân tích theo thẻ\nKhi Cost Explorer mở ra, bạn sẽ thấy giao diện với một biểu đồ mặc định hiển thị tổng chi phí theo dịch vụ. Bây giờ, chúng ta sẽ tùy chỉnh báo cáo này để phân tích chi phí theo các thẻ bạn đã gắn.\nNội dung 6.3.1. Giới thiệu về Cost Explorer\n6.3.2. Truy cập Cost Explorer\n6.3.3. Cấu hình báo cáo để phân tích theo thẻ\n6.3.4. Lưu báo cáo để truy cập nhanh\n6.3.5. Hiểu về \u0026ldquo;No tag key\u0026rdquo; và dữ liệu chưa cập nhật\n"
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/5-budgets/5.2/5.2.3/",
+	"title": "Cấu hình Chi tiết Ngân sách",
+	"tags": [],
+	"description": "",
+	"content": "5.2.3. Cấu hình Chi tiết Ngân sách\nName: Đặt tên có ý nghĩa cho ngân sách của bạn. Ví dụ: MonthlyEC2Budget (nếu bạn muốn theo dõi chi phí EC2 hàng tháng) hoặc OverallAWSMonthlyLimit (nếu bạn muốn theo dõi tổng chi phí tài khoản). Period: Chọn tần suất mà ngân sách của bạn sẽ được đánh giá. Chọn Monthly (Hàng tháng). Các lựa chọn khác bao gồm Quarterly (Hàng quý), Annually (Hàng năm), hoặc Daily (Hàng ngày). Budget amount: Nhập số tiền ngân sách bạn muốn đặt cho tháng. Ví dụ: Nhập 10 (USD) nếu bạn muốn đặt một giới hạn thấp để thử nghiệm và nhận cảnh báo sớm. Start date: Để mặc định là ngày hiện tại. End date (Optional): Bạn có thể để trống nếu muốn ngân sách này lặp lại vô thời hạn vào mỗi kỳ (ví dụ: mỗi tháng). Nếu bạn muốn một ngân sách chỉ dùng một lần, hãy chọn ngày kết thúc. "
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/3-tagging/3.2/3.2.3/",
+	"title": "Cấu hình Name and Tags",
+	"tags": [],
+	"description": "",
+	"content": "3.2.3. Cấu hình Name and Tags\nĐây là bước quan trọng nhất để áp dụng chiến lược gắn thẻ của bạn ngay từ đầu.\nMục \u0026ldquo;Name and tags\u0026rdquo;:\nNgay dưới tiêu đề \u0026ldquo;Launch an instance\u0026rdquo;, bạn sẽ thấy phần Name and tags. Trong ô Name, nhập tên mà bạn muốn hiển thị cho Instance này. Tên này sẽ tự động tạo ra một thẻ với Key là Name và Value là tên bạn nhập. Ví dụ: Nhập Web-Server-Dev-001. Thêm các thẻ phân bổ chi phí tùy chỉnh:\nNgay bên cạnh ô \u0026ldquo;Name\u0026rdquo;, click vào nút Add additional tags. Một bảng để thêm các cặp Key-Value cho thẻ sẽ xuất hiện.\nBạn sẽ thêm các thẻ sau đây. Hãy chú ý đến việc viết hoa/thường (case-sensitive) của Key và Value để đảm bảo tính nhất quán.\nThẻ 1 (Phòng ban chịu trách nhiệm): Key: Department Value: Marketing (hoặc Marketing, Finance, IT tùy theo cấu trúc của bạn) Thẻ 2 (Môi trường triển khai): Key: Environment Value: Development (hoặc Production, Staging, Test) Thẻ 3 (Trung tâm chi phí nội bộ - Tùy chọn nhưng khuyến khích): Key: CostCenter Value: CC001 (hoặc mã trung tâm chi phí cụ thể của tổ chức bạn) Thẻ 4 (Chủ sở hữu hoặc người chịu trách nhiệm chính - Tùy chọn): Key: Owner Value: ThanhTung (hoặc tên người chịu trách nhiệm) Để thêm mỗi thẻ, bạn sẽ nhập Key và Value vào các ô trống, sau đó click vào nút Add tag hoặc tương tự để thêm hàng mới cho thẻ tiếp theo. Giải thích \u0026ldquo;Resource types\u0026rdquo;: Trong giao diện này, bạn sẽ thấy cột \u0026ldquo;Resource types\u0026rdquo; bên cạnh mỗi thẻ với giá trị mặc định là \u0026ldquo;Instances\u0026rdquo;. Điều này chỉ đơn thuần là một chỉ báo rằng các thẻ này sẽ được áp dụng cho loại tài nguyên là EC2 Instance mà bạn đang tạo. Bạn không cần phải thay đổi hay điều chỉnh nó ở đây.\n"
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/4-activate-tags/4.3/",
+	"title": "Hiểu về thời gian chờ đợi dữ liệu",
+	"tags": [],
+	"description": "",
+	"content": "4.3. Hiểu về thời gian chờ đợi dữ liệu\nĐây là một điểm rất quan trọng cần lưu ý:\nThời gian xử lý: Sau khi bạn kích hoạt các thẻ, AWS cần một khoảng thời gian để xử lý dữ liệu chi phí đã phát sinh và liên kết chúng với các thẻ đã được kích hoạt. Quá trình này không phải là tức thì. Khoảng thời gian chờ: Để các thẻ xuất hiện trong danh sách \u0026ldquo;User-defined cost allocation tags\u0026rdquo; sau khi gắn vào tài nguyên: Thường là vài phút đến 1-2 giờ. Để dữ liệu chi phí được phân bổ theo các thẻ đã kích hoạt và hiển thị đầy đủ trong Cost Explorer: Thường là 24 giờ, nhưng có thể kéo dài đến 48 giờ trong một số trường hợp. Chi phí vẫn phát sinh: Trong thời gian chờ đợi này, EC2 Instance của bạn (nếu đang running) vẫn tiếp tục phát sinh chi phí. Việc kích hoạt thẻ chỉ ảnh hưởng đến cách chi phí được báo cáo, chứ không phải việc chi phí có phát sinh hay không. Lời khuyên: Trong khi chờ đợi, bạn có thể chuyển sang Phần 5: Thiết Lập Ngân sách và Cảnh báo với AWS Budgets, vì bước này không phụ thuộc vào việc dữ liệu thẻ đã cập nhật trong Cost Explorer hay chưa. "
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/6-cost-explorer/6.3/6.3.3/",
+	"title": "Sử dụng Filters để tinh chỉnh báo cáo",
+	"tags": [],
+	"description": "",
+	"content": "6.3.3. Sử dụng Filters để tinh chỉnh báo cáo\nPhần \u0026ldquo;Filters\u0026rdquo; ở cột bên phải cho phép bạn thu hẹp phạm vi dữ liệu mà bạn muốn phân tích.\nỞ cột bên phải của giao diện Cost Explorer, dưới mục Filters, bạn sẽ thấy các tùy chọn như Resource, Cost category, Tag, v.v. a. Lọc theo Dịch vụ (Service): Click vào Service ở cột bên phải. Chọn EC2 - Elastic Compute Cloud từ danh sách. Mục đích: Điều này sẽ lọc bỏ tất cả chi phí từ các dịch vụ AWS khác và chỉ hiển thị chi phí liên quan đến EC2 (nơi Instance của bạn đang chạy). Điều này hữu ích khi bạn muốn tập trung vào chi phí của một dịch vụ cụ thể. b. Lọc theo Tag cụ thể: Dưới mục \u0026ldquo;Tag\u0026rdquo; ở cột bên phải, bạn sẽ thấy các thẻ của mình đã được kích hoạt (ví dụ: Department, Project). Click vào thẻ bạn muốn lọc, ví dụ Department. Sổ ra danh sách các giá trị của thẻ Department (ví dụ: Marketing). Chọn giá trị Marketing. Mục đích: Báo cáo sẽ chỉ hiển thị chi phí liên quan đến các tài nguyên có thẻ Department là Marketing. Điều này hữu ích khi bạn muốn xem chi phí chỉ cho một phòng ban hoặc dự án cụ thể mà không cần xem toàn bộ dữ liệu. Bạn có thể áp dụng nhiều bộ lọc cùng lúc để có báo cáo rất cụ thể (ví dụ: chi phí EC2 của bộ phận Marketing cho dự án Website Launch trong môi trường Development). "
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/2-organizations/2.3/",
+	"title": "Tạo Organizational Unit trong Root",
+	"tags": [],
+	"description": "",
+	"content": "2.3. Tạo Organizational Unit (OU) trong Root\nTrong ví dụ này, chúng ta sẽ tạo một cấu trúc OU như sau:\nBusiness-Units-OU (Root chính) Engineering-OU (OU con) Bước 1: Mở AWS Organizations\nĐăng nhập AWS Management Console bằng Management Account. Truy cập dịch vụ AWS Organizations. Bước 2: Tạo Root OU \u0026ldquo;Business-Units-OU\u0026rdquo;\nTrong tab \u0026ldquo;Organize accounts\u0026rdquo;, chọn Root mặc định. Nhấn \u0026ldquo;Create organizational unit\u0026rdquo;. Nhập tên: Business-Units-OU. Nhấn Create. Bước 3: Tạo OU con \u0026ldquo;Engineering-OU\u0026rdquo;\nChọn Business-Units-OU vừa tạo. Nhấn \u0026ldquo;Create organizational unit\u0026rdquo;. Nhập tên: Engineering-OU. Nhấn Create. Kết quả\nCấu trúc OU sẽ như sau:\nBusiness-Units-OU Engineering-OU "
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/3-tagging/",
+	"title": "Tạo Tài Nguyên và Chiến Lược Gắn Thẻ (Tagging)",
+	"tags": [],
+	"description": "",
+	"content": "Việc gắn thẻ (tagging) là nền tảng của mọi chiến lược quản lý chi phí hiệu quả trên AWS. Thẻ là các cặp khóa-giá trị (key-value pairs) mà bạn có thể gán cho tài nguyên AWS của mình. Chúng cho phép bạn phân loại tài nguyên theo các tiêu chí khác nhau, chẳng hạn như mục đích, chủ sở hữu, môi trường hoặc trung tâm chi phí. Khi các thẻ này được kích hoạt cho mục đích phân bổ chi phí, chúng sẽ xuất hiện trong các báo cáo chi phí của bạn, cho phép bạn phân tích chi tiêu theo các nhóm có ý nghĩa.\nNội dung 3.1. Tại sao cần gắn thẻ cho tài nguyên AWS?\n3.2. Khởi chạy EC2 Instance và gắn thẻ chi tiết\n"
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/6-cost-explorer/6.3/6.3.4/",
+	"title": "Các tùy chọn hiển thị biểu đồ và bảng",
+	"tags": [],
+	"description": "",
+	"content": "6.3.4. Các tùy chọn hiển thị biểu đồ và bảng\nKiểu biểu đồ (Chart type): Phía trên biểu đồ, bạn có thể thay đổi kiểu hiển thị để dễ nhìn hơn (ví dụ: Bar chart, Line chart, Area chart). Bảng \u0026ldquo;Cost and usage breakdown\u0026rdquo;: Phía dưới biểu đồ, bạn sẽ thấy một bảng dữ liệu chi tiết. Bảng này sẽ phản ánh việc nhóm và lọc bạn đã thực hiện, cung cấp các con số chi phí cụ thể cho từng danh mục đã nhóm. "
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/3-tagging/3.2/3.2.4/",
+	"title": "Cấu hình các thiết lập cơ bản khác",
+	"tags": [],
+	"description": "",
+	"content": "3.2.4. Cấu hình các thiết lập cơ bản khác (AMI, Instance Type, Key Pair, Network, Storage)\nSau khi đã cấu hình thẻ, bạn cần tiếp tục cấu hình các thông số kỹ thuật cho Instance của mình.\nApplication and OS Images (Amazon Machine Image - AMI): Chọn một AMI phù hợp với Free Tier để tránh phát sinh chi phí không mong muốn trong quá trình học tập. Ví dụ: Chọn Amazon Linux 2023 AMI (HVM) - Kernel 6.1 hoặc Ubuntu Server 22.04 LTS. [Ảnh 3.2.4.1: Phần chọn AMI trên trang Launch an instance] Instance type: Chọn một loại Instance đủ điều kiện cho Free Tier. Ví dụ: Chọn t2.micro (hoặc t3.micro). Key pair (login): Key pair là cần thiết nếu bạn muốn kết nối SSH vào Instance sau này. Chọn một cặp khóa hiện có từ danh sách thả xuống, hoặc click Create new key pair để tạo một cặp khóa mới và tải xuống file .pem. [Ảnh 3.2.4.3: Phần chọn Key pair trên trang Launch an instance] Network settings: Đảm bảo Auto-assign public IP là Enable nếu bạn muốn Instance có địa chỉ IP công cộng để truy cập từ Internet. Firewall (Security group): Security Group đóng vai trò là tường lửa ảo kiểm soát lưu lượng truy cập vào và ra khỏi Instance của bạn. Chọn Create security group. Đảm bảo Allow SSH traffic from the internet (Port 22 từ 0.0.0.0/0) được chọn để bạn có thể kết nối SSH. Nếu bạn dự định chạy một ứng dụng web, hãy chọn thêm Allow HTTP traffic from the internet (Port 80) và/hoặc Allow HTTPS traffic from the internet (Port 443). Bạn có thể click Edit để tùy chỉnh các quy tắc Security Group chi tiết hơn. Configure storage: Để mặc định 8 GiB là đủ cho mục đích của Lab này. Dung lượng này thường nằm trong hạn mức Free Tier cho EBS (Elastic Block Store). Xem lại Summary: Ở cột bên phải, bạn sẽ thấy một bản tóm tắt các cấu hình của Instance. Hãy kiểm tra lại một lần cuối. "
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/5-budgets/5.2/5.2.4/",
+	"title": "Cấu hình Phạm vi",
+	"tags": [],
+	"description": "",
+	"content": "5.2.4. Cấu hình Phạm vi\nPhần này cho phép bạn xác định ngân sách này sẽ áp dụng cho những chi phí nào.\nFilter type: Để bắt đầu đơn giản và không phụ thuộc vào việc các thẻ tùy chỉnh của bạn đã xuất hiện đầy đủ trong Cost Explorer hay chưa, bạn có thể chọn: All AWS services: Nếu bạn muốn ngân sách này áp dụng cho tổng chi phí của toàn bộ tài khoản AWS của bạn. Service: Nếu bạn chỉ muốn theo dõi chi phí của một dịch vụ cụ thể (ví dụ: chỉ EC2). Click Add filter, chọn Service từ danh sách thả xuống, sau đó chọn EC2 - Elastic Compute Cloud. Linked account: (Bỏ qua cho Lab này vì bạn đang dùng tài khoản quản lý và chưa có tài khoản con). Lưu ý quan trọng về Tag: Bạn chưa chọn Tag ở bước này nếu bạn đang tạo ngân sách ban đầu và đang chờ dữ liệu thẻ cập nhật trong Cost Explorer. Sau này, khi các thẻ (Department, Project, v.v.) đã \u0026ldquo;Active\u0026rdquo; và dữ liệu đã hiển thị trong Cost Explorer, bạn có thể quay lại chỉnh sửa ngân sách này để thêm bộ lọc theo thẻ. Điều này sẽ giúp bạn tạo các ngân sách chi tiết hơn cho từng phòng ban hoặc dự án cụ thể. "
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/4-activate-tags/",
+	"title": "Kích Hoạt Thẻ Phân Bổ Chi Phí (Cost Allocation Tags)",
+	"tags": [],
+	"description": "",
+	"content": "Sau khi bạn đã gắn thẻ cho tài nguyên của mình, bước tiếp theo là kích hoạt các thẻ đó trong AWS Billing Dashboard. Việc này báo cho AWS biết rằng bạn muốn sử dụng các thẻ này để phân loại và phân bổ chi phí trong các báo cáo chi phí của mình, đặc biệt là trong Cost Explorer. Nếu một thẻ không được kích hoạt, nó sẽ không xuất hiện như một tùy chọn để lọc hoặc nhóm chi phí trong các báo cáo.\nNội dung 4.1. Mục đích của Cost Allocation Tags\n4.2. Các bước kích hoạt thẻ\n4.3. Hiểu về thời gian chờ đợi dữ liệu\n"
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/6-cost-explorer/6.4/",
+	"title": "Lưu báo cáo để truy cập nhanh",
+	"tags": [],
+	"description": "",
+	"content": "6.4. Lưu báo cáo để truy cập nhanh\nKhi bạn đã cấu hình một báo cáo theo ý muốn và thấy dữ liệu được phân bổ đúng cách, bạn nên lưu lại báo cáo đó để dễ dàng truy cập trong tương lai.\nClick vào nút Save to report library ở góc trên bên phải của trang. Đặt tên có ý nghĩa cho báo cáo của bạn (ví dụ: Chi phi theo Phong Ban Thang 7, Chi phi Du an WebsiteLaunch). Click Save. Báo cáo này sẽ xuất hiện trong mục Saved reports ở thanh điều hướng bên trái của Cost Explorer, giúp bạn truy cập nhanh chóng mà không cần phải thiết lập lại các bộ lọc và nhóm mỗi lần. "
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/2-organizations/2.4/",
+	"title": "Tạo AWS Account trong Organizational Unit",
+	"tags": [],
+	"description": "",
+	"content": "2.4. Tạo AWS Account trong Organizational Unit\nTrong ví dụ này, chúng ta sẽ tạo một AWS Account mới có tên ProjectX-Dev-Account và đặt nó vào Engineering-OU.\nBước 1: Mở AWS Organizations\nĐăng nhập AWS Management Console bằng Management Account. Truy cập dịch vụ AWS Organizations. Bước 2: Chọn OU \u0026ldquo;Engineering-OU\u0026rdquo;\nTrong \u0026ldquo;Organize accounts\u0026rdquo;, chọn Business-Units-OU. Mở Engineering-OU. Bước 3: Tạo AWS Account mới\nTrong Engineering-OU, nhấn \u0026ldquo;Add an account\u0026rdquo; → \u0026ldquo;Create account\u0026rdquo;. Nhập: Account name: ProjectX-Dev-Account Email address: Email chưa từng đăng ký AWS. Nhấn Create. Bước 4: Xác nhận\nAWS sẽ gửi email kích hoạt tới địa chỉ email đã nhập. Sau khi xác nhận, tài khoản sẽ hiển thị dưới Engineering-OU. "
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/5-budgets/5.2/5.2.5/",
+	"title": "Cấu hình Cảnh báo",
+	"tags": [],
+	"description": "",
+	"content": "5.2.5. Cấu hình Cảnh báo\nĐây là nơi bạn xác định khi nào và ai sẽ nhận được thông báo khi chi phí đạt đến ngưỡng.\nClick Add an alert threshold. Threshold: Nhập một tỷ lệ phần trăm của ngân sách (ví dụ: 80%) hoặc một số tiền cụ thể (ví dụ: 8 USD nếu ngân sách là 10 USD). Alert type: Chọn Actual (cảnh báo khi chi phí thực tế đạt ngưỡng) hoặc Forecasted (cảnh báo khi chi phí dự kiến đạt ngưỡng - đây là một tùy chọn rất hữu ích để phòng ngừa, giúp bạn hành động trước khi vượt ngân sách). Email recipients: Nhập địa chỉ email của bạn để nhận cảnh báo. Bạn có thể nhập nhiều địa chỉ, phân cách bằng dấu phẩy. Amazon SNS topic (tùy chọn nâng cao): Nếu bạn muốn cảnh báo được gửi đến một hệ thống khác (ví dụ: Slack, Microsoft Teams, hoặc kích hoạt một AWS Lambda function để tự động hóa), bạn có thể cấu hình một SNS topic tại đây. Đối với Lab này, bạn có thể bỏ qua tùy chọn này và chỉ tập trung vào cảnh báo email. [Ảnh 5.2.5: Phần \u0026ldquo;Alerts\u0026rdquo; với Threshold và Email recipients được cấu hình] "
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/5-budgets/",
+	"title": "Chủ động Quản lý Chi tiêu với AWS Budgets",
+	"tags": [],
+	"description": "",
+	"content": "AWS Budgets là một dịch vụ mạnh mẽ giúp bạn chủ động kiểm soát chi tiêu AWS của mình. Thay vì chỉ xem lại hóa đơn sau khi chi phí đã phát sinh, Budgets cho phép bạn đặt ra các ngưỡng chi phí hoặc mức sử dụng mong muốn và nhận được cảnh báo khi chi tiêu của bạn đạt đến (hoặc dự kiến đạt đến) các ngưỡng đó. Điều này giúp bạn tránh các chi phí bất ngờ và có thời gian để điều chỉnh hoặc tối ưu hóa tài nguyên.\nNội dung 5.1. Tầm quan trọng của việc thiết lập Budgets\n5.2. Tạo một Cost Budget cơ bản\n"
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/6-cost-explorer/6.5/",
+	"title": "Hiểu về No tag key và dữ liệu chưa cập nhật",
+	"tags": [],
+	"description": "",
+	"content": "6.5. Hiểu về No tag key và dữ liệu chưa cập nhật\n\u0026ldquo;No tag key: [Tên thẻ]\u0026rdquo;: Khi bạn nhóm theo một thẻ (ví dụ: Tag:Department), nếu có chi phí phát sinh từ các tài nguyên không được gắn thẻ Department hoặc từ các loại chi phí không thể gắn thẻ trực tiếp (ví dụ: chi phí hỗ trợ AWS, một số loại phí truyền dữ liệu), thì các chi phí đó sẽ được nhóm lại dưới nhãn \u0026ldquo;No tag key: Department\u0026rdquo;. Mục tiêu của bạn là giảm thiểu chi phí trong nhóm \u0026ldquo;No tag key\u0026rdquo; này bằng cách gắn thẻ đầy đủ cho tài nguyên. Dữ liệu chưa cập nhật: Dữ liệu chi phí trong Cost Explorer không phải là thời gian thực. Sau khi các thẻ được kích hoạt, có thể mất một thời gian (vài giờ đến 24-48 giờ) để dữ liệu cập nhật đầy đủ. Nếu bạn chưa thấy con số mong muốn ngay lập tức, hãy kiên nhẫn và kiểm tra lại sau. "
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/3-tagging/3.2/3.2.5/",
+	"title": "Hoàn tất khởi chạy và xác nhận trạng thái",
+	"tags": [],
+	"description": "",
+	"content": "3.2.5. Hoàn tất khởi chạy và xác nhận trạng thái\nKhởi chạy Instance: Khi bạn đã hài lòng với tất cả các cài đặt và đã thêm đầy đủ các thẻ. Click vào nút màu cam Launch instance ở phía dưới bên phải của trang. Xác nhận Instance đang chạy: Sau khi click Launch instance, bạn sẽ được chuyển hướng đến một trang xác nhận. Click View all instances để quay lại bảng điều khiển EC2 Instances. Trong danh sách Instances, tìm Instance bạn vừa tạo (theo tên bạn đã đặt). Đảm bảo trạng thái của nó là Running. Click vào Instance đó và chọn tab Tags ở khung dưới để xác nhận rằng tất cả các thẻ (Department, Project, Environment, v.v.) đã được gắn chính xác. "
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/6-cost-explorer/",
+	"title": "Phân Tích và Trực Quan Hóa Chi phí với AWS Cost Explorer",
+	"tags": [],
+	"description": "",
+	"content": "AWS Cost Explorer là công cụ mạnh mẽ nhất để bạn trực quan hóa, hiểu và quản lý chi phí và mức sử dụng AWS của mình theo thời gian. Sau khi bạn đã gắn thẻ cho tài nguyên và kích hoạt các thẻ phân bổ chi phí, Cost Explorer sẽ là nơi bạn thấy \u0026ldquo;bức tranh toàn cảnh\u0026rdquo; về chi tiêu của mình, được phân loại theo các tiêu chí kinh doanh có ý nghĩa.\nNội dung 6.1. Giới thiệu về Cost Explorer\n6.2. Truy cập Cost Explorer\n6.3. Cấu hình báo cáo để phân tích theo thẻ\n6.4. Lưu báo cáo để truy cập nhanh\n6.5. Hiểu về \u0026ldquo;No tag key\u0026rdquo; và dữ liệu chưa cập nhật\n"
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/5-budgets/5.2/5.2.6/",
+	"title": "Xem lại và Tạo Ngân sách",
+	"tags": [],
+	"description": "",
+	"content": "5.2.6. Xem lại và Tạo Ngân sách\nClick Next (hoặc \u0026ldquo;Configure actions\u0026rdquo; nếu có). Xem lại tất cả các cài đặt của ngân sách bạn vừa cấu hình. Click Create budget. Kết quả: Bạn đã tạo thành công một ngân sách AWS. Bạn sẽ bắt đầu nhận được email cảnh báo khi chi phí của bạn (tổng thể hoặc của dịch vụ EC2) đạt đến ngưỡng bạn đã đặt. Ngân sách này sẽ hiển thị trong danh sách các Budgets của bạn, cung cấp một cái nhìn tổng quan về tình hình chi tiêu của bạn. "
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/7-cleanup/",
+	"title": "Dọn Dẹp Tài Nguyên ",
+	"tags": [],
+	"description": "",
+	"content": "Sau khi hoàn thành Lab và đã hiểu rõ về cách quản lý và phân bổ chi phí trên AWS, việc dọn dẹp các tài nguyên đã tạo là một bước cực kỳ quan trọng. Điều này giúp bạn tránh phát sinh các chi phí không mong muốn sau khi quá trình học tập kết thúc.\nNội dung 7.1. Tại sao cần dọn dẹp tài nguyên?\n7.2. Các bước dừng (Stop) hoặc chấm dứt (Terminate) EC2 Instance\n"
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/categories/",
+	"title": "Categories",
+	"tags": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "http://localhost:1313/workshop-cost-allocation/tags/",
+	"title": "Tags",
+	"tags": [],
+	"description": "",
+	"content": ""
+}]
